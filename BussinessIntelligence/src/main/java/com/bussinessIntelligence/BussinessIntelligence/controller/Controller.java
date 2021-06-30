@@ -25,6 +25,8 @@ public class Controller {
     ProductoService productoService;
     @Autowired
     UsuarioService usuarioService;
+    @Autowired
+    RolService rolService;
 
     //clientes
     @GetMapping("/listaclientes")
@@ -314,6 +316,46 @@ public class Controller {
             return new ResponseEntity(new Mensaje("No existe el usuario"), HttpStatus.NOT_FOUND);
         usuarioService.delete(idusuario);
         return new ResponseEntity(new Mensaje("Usuario eliminado"), HttpStatus.OK);
+    }
+
+    //ROLES
+    @GetMapping("/listaroles")
+    public ResponseEntity<List<Rol>> listRol(){
+        List<Rol> listRol = rolService.list();
+        return new ResponseEntity(listRol, HttpStatus.OK);
+    }
+    @PostMapping("/createrol")
+    public ResponseEntity<?> create(@RequestBody RolDto rolDto){
+        if (!usuarioService.existByIdUsr(rolDto.getIdusuario()))
+            return new ResponseEntity(new Mensaje("El usuario no existe"), HttpStatus.NOT_FOUND);
+        if(StringUtils.isBlank(rolDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (rolDto.getIdusuario()<=0)
+            return new ResponseEntity(new Mensaje("El usuario es obligatorio"), HttpStatus.BAD_REQUEST);
+        Rol rol = new Rol(rolDto.getNombre(),rolDto.getIdusuario());
+        rolService.save(rol);
+        return new ResponseEntity(new Mensaje("Rol creado"), HttpStatus.OK);
+    }
+    @PutMapping("updaterol/{idrol}")
+    public ResponseEntity<?> update(@PathVariable("idrol")int idrol, @RequestBody RolDto rolDto){
+        if(!rolService.existByIdRol(rolDto.getIdusuario()))
+            return new ResponseEntity(new Mensaje("No existe el usuario"), HttpStatus.NOT_FOUND);
+        if(StringUtils.isBlank(rolDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (rolDto.getIdusuario()<=0)
+            return new ResponseEntity(new Mensaje("El usuario es obligatorio"), HttpStatus.BAD_REQUEST);
+        Rol rol = rolService.getOneRol(idrol).get();
+        rol.setNombre(rolDto.getNombre());
+        rol.setIdusuario(rolDto.getIdusuario());
+        rolService.save(rol);
+        return new ResponseEntity(new Mensaje("Rol actualizado"), HttpStatus.OK);
+    }
+    @DeleteMapping("/deleterol/{idrol}")
+    public ResponseEntity<?> deleteRol(@PathVariable("idrol")int idrol){
+        if(!rolService.existByIdRol(idrol))
+            return new ResponseEntity(new Mensaje("No existe el rol"), HttpStatus.NOT_FOUND);
+        rolService.delete(idrol);
+        return new ResponseEntity(new Mensaje("Rol eliminado"), HttpStatus.OK);
     }
 
 
