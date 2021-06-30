@@ -1,4 +1,8 @@
-package com.bussinessIntelligence.BussinessIntelligence.repository;
+/*package com.bussinessIntelligence.BussinessIntelligence.repository;
 
-public class ProductoRepository {
+import com.bussinessIntelligence.BussinessIntelligence.entity.Producto;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 }
+*/

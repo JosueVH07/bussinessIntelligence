@@ -1,4 +1,8 @@
-package com.bussinessIntelligence.BussinessIntelligence.repository;
+/*package com.bussinessIntelligence.BussinessIntelligence.repository;
 
-public class Usuariorepository {
+import com.bussinessIntelligence.BussinessIntelligence.entity.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface Usuariorepository extends JpaRepository<Usuario, Integer> {
 }
+*/

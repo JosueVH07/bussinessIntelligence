@@ -1,4 +1,8 @@
-package com.bussinessIntelligence.BussinessIntelligence.repository;
+/*package com.bussinessIntelligence.BussinessIntelligence.repository;
 
-public class PuestoRepository {
+import com.bussinessIntelligence.BussinessIntelligence.entity.Puesto;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PuestoRepository extends JpaRepository<Puesto, Integer> {
 }
+*/

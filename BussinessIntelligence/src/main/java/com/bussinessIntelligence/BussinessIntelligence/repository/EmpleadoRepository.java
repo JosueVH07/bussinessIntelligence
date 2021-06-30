@@ -1,4 +1,8 @@
-package com.bussinessIntelligence.BussinessIntelligence.repository;
+/*package com.bussinessIntelligence.BussinessIntelligence.repository;
 
-public class EmpleadoRepository {
+import com.bussinessIntelligence.BussinessIntelligence.entity.Empleado;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmpleadoRepository extends JpaRepository<Empleado, Integer> {
 }
+*/

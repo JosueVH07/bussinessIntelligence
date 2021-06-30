@@ -1,4 +1,8 @@
-package com.bussinessIntelligence.BussinessIntelligence.repository;
+/*package com.bussinessIntelligence.BussinessIntelligence.repository;
 
-public class RolRepository {
+import com.bussinessIntelligence.BussinessIntelligence.entity.Rol;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RolRepository extends JpaRepository<Rol, Integer> {
 }
+*/
