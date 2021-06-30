@@ -31,6 +31,8 @@ public class Controller {
     PuestoService puestoService;
     @Autowired
     EmpleadoService empleadoService;
+    @Autowired
+    DetalleVentaService detalleVentaService;
 
     //clientes
     @GetMapping("/listaclientes")
@@ -473,6 +475,13 @@ public class Controller {
             return new ResponseEntity(new Mensaje("No existe el empleado"), HttpStatus.NOT_FOUND);
         empleadoService.delete(idempleado);
         return new ResponseEntity(new Mensaje("Empleado eliminado"), HttpStatus.OK);
+    }
+
+    //Detalleventa
+    @GetMapping("/detalleventa")
+    public ResponseEntity<List<DetalleVenta>> listDV(){
+        List<DetalleVenta> listDV = detalleVentaService.list();
+        return new ResponseEntity(listDV, HttpStatus.OK);
     }
 
 
