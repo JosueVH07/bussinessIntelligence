@@ -27,6 +27,8 @@ public class Controller {
     UsuarioService usuarioService;
     @Autowired
     RolService rolService;
+    @Autowired
+    PuestoService puestoService;
 
     //clientes
     @GetMapping("/listaclientes")
@@ -356,6 +358,38 @@ public class Controller {
             return new ResponseEntity(new Mensaje("No existe el rol"), HttpStatus.NOT_FOUND);
         rolService.delete(idrol);
         return new ResponseEntity(new Mensaje("Rol eliminado"), HttpStatus.OK);
+    }
+
+    //Puesto
+    @GetMapping("/listapuesto")
+    public ResponseEntity<List<Puesto>> listPu(){
+        List<Puesto> listPu = puestoService.list();
+        return new ResponseEntity(listPu, HttpStatus.OK);
+    }
+    @PostMapping("/createpuesto")
+    public ResponseEntity<?> create(@RequestBody PuestoDto puestoDto){
+        if(StringUtils.isBlank(puestoDto.getRolempleado()))
+            return new ResponseEntity(new Mensaje("El rol es obligatorio"), HttpStatus.BAD_REQUEST);
+        Puesto puesto = new Puesto(puestoDto.getRolempleado(),puestoDto.getDescripcion());
+        puestoService.save(puesto);
+        return new ResponseEntity(new Mensaje("Puesto creado"), HttpStatus.OK);
+    }
+    @PutMapping("updatepuesto/{idpuesto}")
+    public ResponseEntity<?> update(@PathVariable("idpuesto")int idpuesto, @RequestBody PuestoDto puestoDto){
+        if(StringUtils.isBlank(puestoDto.getRolempleado()))
+            return new ResponseEntity(new Mensaje("El Rol es obligatorio"), HttpStatus.BAD_REQUEST);
+        Puesto puesto = puestoService.getOnePu(idpuesto).get();
+        puesto.setRolempleado(puestoDto.getRolempleado());
+        puesto.setDescripcion(puesto.getDescripcion());
+        puestoService.save(puesto);
+        return new ResponseEntity(new Mensaje("Puesto actualizado"), HttpStatus.OK);
+    }
+    @DeleteMapping("/deletepuesto/{idpuesto}")
+    public ResponseEntity<?> deletePu(@PathVariable("idpuesto")int idpuesto){
+        if(!puestoService.existByIdPu(idpuesto))
+            return new ResponseEntity(new Mensaje("No existe el puesto"), HttpStatus.NOT_FOUND);
+        puestoService.delete(idpuesto);
+        return new ResponseEntity(new Mensaje("Puesto eliminado"), HttpStatus.OK);
     }
 
 
