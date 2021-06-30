@@ -29,6 +29,8 @@ public class Controller {
     RolService rolService;
     @Autowired
     PuestoService puestoService;
+    @Autowired
+    EmpleadoService empleadoService;
 
     //clientes
     @GetMapping("/listaclientes")
@@ -391,8 +393,87 @@ public class Controller {
         puestoService.delete(idpuesto);
         return new ResponseEntity(new Mensaje("Puesto eliminado"), HttpStatus.OK);
     }
+    //Empleado
+    @GetMapping("/listaempleado")
+    public ResponseEntity<List<Empleado>> listEm(){
+        List<Empleado> listEm = empleadoService.list();
+        return new ResponseEntity(listEm, HttpStatus.OK);
+    }
+    @GetMapping("/detailempleado/{idempleado}")
+    public  ResponseEntity<Empleado> getByIdEm(@PathVariable("idempleado") int idempleado){
+        if(!empleadoService.existByIdEm(idempleado))
+            return new ResponseEntity(new Mensaje("No existe el empleado"), HttpStatus.NOT_FOUND);
+        Empleado empleado = empleadoService.getOneEm(idempleado).get();
+        return new ResponseEntity(empleado, HttpStatus.OK);
+    }
+    @PostMapping("/createempleado")
+    public ResponseEntity<?> create(@RequestBody EmpleadoDto empleadoDto){
+        if (empleadoDto.getIdpuesto()<=0)
+            return new ResponseEntity(new Mensaje("El id puesto es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (empleadoDto.getIdusuario()<=0)
+            return new ResponseEntity(new Mensaje("El id usuario es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (empleadoDto.getIdrol()<=0)
+            return new ResponseEntity(new Mensaje("El id rol es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getTelefono()))
+            return new ResponseEntity(new Mensaje("El telefono es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getDireccion()))
+            return new ResponseEntity(new Mensaje("La direccion es obligatoria"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getCorreo()))
+            return new ResponseEntity(new Mensaje("El correo es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(!puestoService.existByIdPu(empleadoDto.getIdpuesto()))
+            return new ResponseEntity(new Mensaje("No existe el puesto"), HttpStatus.NOT_FOUND);
+        if(!usuarioService.existByIdUsr(empleadoDto.getIdusuario()))
+            return new ResponseEntity(new Mensaje("No existe el usuario"), HttpStatus.NOT_FOUND);
+        if(!rolService.existByIdRol(empleadoDto.getIdrol()))
+            return new ResponseEntity(new Mensaje("No existe el rol"), HttpStatus.NOT_FOUND);
+        Empleado empleado = new Empleado(empleadoDto.getIdpuesto(),empleadoDto.getIdusuario(), empleadoDto.getIdrol(),empleadoDto.getNombre(),empleadoDto.getTelefono(),empleadoDto.getDireccion(),empleadoDto.getCorreo());
+        empleadoService.save(empleado);
+        return new ResponseEntity(new Mensaje("Empleado creado"), HttpStatus.OK);
+    }
 
+    @PutMapping("updateempleado/{idempleado}")
+    public ResponseEntity<?> update(@PathVariable("idempleado")int idempleado, @RequestBody EmpleadoDto empleadoDto){
+        if(empleadoDto.getIdpuesto()<=0)
+            return new ResponseEntity(new Mensaje("El id puesto es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(empleadoDto.getIdusuario()<=0)
+            return new ResponseEntity(new Mensaje("El id usuario es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(empleadoDto.getIdrol()<=0)
+            return new ResponseEntity(new Mensaje("El id rol es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getTelefono()))
+            return new ResponseEntity(new Mensaje("El telefono es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getDireccion()))
+            return new ResponseEntity(new Mensaje("La direccion es obligatoria"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(empleadoDto.getCorreo()))
+            return new ResponseEntity(new Mensaje("El correo es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(!puestoService.existByIdPu(empleadoDto.getIdpuesto()))
+            return new ResponseEntity(new Mensaje("No existe el puesto"), HttpStatus.NOT_FOUND);
+        if(!usuarioService.existByIdUsr(empleadoDto.getIdusuario()))
+            return new ResponseEntity(new Mensaje("No existe el usuario"), HttpStatus.NOT_FOUND);
+        if(!rolService.existByIdRol(empleadoDto.getIdrol()))
+            return new ResponseEntity(new Mensaje("No existe el rol"), HttpStatus.NOT_FOUND);
+        Empleado empleado = empleadoService.getOneEm(idempleado).get();
+        empleado.setIdpuesto(empleadoDto.getIdpuesto());
+        empleado.setIdusuario(empleadoDto.getIdusuario());
+        empleado.setIdrol(empleadoDto.getIdrol());
+        empleado.setNombre(empleadoDto.getNombre());
+        empleado.setTelefono(empleadoDto.getTelefono());
+        empleado.setDireccion(empleadoDto.getDireccion());
+        empleado.setCorreo(empleadoDto.getCorreo());
+        empleadoService.save(empleado);
+        return new ResponseEntity(new Mensaje("Empleado actualizado"), HttpStatus.OK);
+    }
 
+    @DeleteMapping("/deleteempleado/{idempleado}")
+    public ResponseEntity<?> deleteEm(@PathVariable("idempleado")int idempleado){
+        if(!empleadoService.existByIdEm(idempleado))
+            return new ResponseEntity(new Mensaje("No existe el empleado"), HttpStatus.NOT_FOUND);
+        empleadoService.delete(idempleado);
+        return new ResponseEntity(new Mensaje("Empleado eliminado"), HttpStatus.OK);
+    }
 
 
 
