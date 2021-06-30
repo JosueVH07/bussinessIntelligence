@@ -1,14 +1,8 @@
 package com.bussinessIntelligence.BussinessIntelligence.controller;
 
 import com.bussinessIntelligence.BussinessIntelligence.dto.*;
-import com.bussinessIntelligence.BussinessIntelligence.entity.Cliente;
-import com.bussinessIntelligence.BussinessIntelligence.entity.Producto;
-import com.bussinessIntelligence.BussinessIntelligence.entity.Prov;
-import com.bussinessIntelligence.BussinessIntelligence.entity.Venta;
-import com.bussinessIntelligence.BussinessIntelligence.service.ClienteService;
-import com.bussinessIntelligence.BussinessIntelligence.service.ProductoService;
-import com.bussinessIntelligence.BussinessIntelligence.service.ProvService;
-import com.bussinessIntelligence.BussinessIntelligence.service.VentaService;
+import com.bussinessIntelligence.BussinessIntelligence.entity.*;
+import com.bussinessIntelligence.BussinessIntelligence.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +23,8 @@ public class Controller {
     ProvService provService;
     @Autowired
     ProductoService productoService;
+    @Autowired
+    UsuarioService usuarioService;
 
     //clientes
     @GetMapping("/listaclientes")
@@ -266,6 +262,60 @@ public class Controller {
         productoService.delete(idproducto);
         return new ResponseEntity(new Mensaje("Producto eliminado"), HttpStatus.OK);
     }
+
+    //Usuarios
+
+    @GetMapping("/listausuarios")
+    public ResponseEntity<List<Usuario>> listUsr(){
+        List<Usuario> listUsr = usuarioService.list();
+        return new ResponseEntity(listUsr, HttpStatus.OK);
+    }
+    @GetMapping("/detailusuario/{idusuario}")
+    public  ResponseEntity<Usuario> getByIdUsr(@PathVariable("idusuario") int idusuario){
+        if(!usuarioService.existByIdUsr(idusuario))
+            return new ResponseEntity(new Mensaje("No existe el usuario"), HttpStatus.NOT_FOUND);
+        Usuario usuario = usuarioService.getOneUsr(idusuario).get();
+        return new ResponseEntity(usuario, HttpStatus.OK);
+    }
+
+    @PostMapping("/createusuario")
+    public ResponseEntity<?> create(@RequestBody UsuarioDto usuarioDto){
+        if (usuarioService.existByUsername(usuarioDto.getUsername()))
+            return new ResponseEntity(new Mensaje("El usuario ya existe"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(usuarioDto.getUsername()))
+            return new ResponseEntity(new Mensaje("El nombre de usuario es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(usuarioDto.getPassword()))
+            return new ResponseEntity(new Mensaje("La contraseña es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (usuarioDto.getPassword().length()<8)
+            return new ResponseEntity(new Mensaje("La contraseña debe tener al menos 8 caracteres"), HttpStatus.BAD_REQUEST);
+        Usuario usuario = new Usuario(usuarioDto.getUsername(),usuarioDto.getPassword());
+        usuarioService.save(usuario);
+        return new ResponseEntity(new Mensaje("Usuario creado"), HttpStatus.OK);
+    }
+    @PutMapping("updateusuario/{idusuario}")
+    public ResponseEntity<?> update(@PathVariable("idusuario")int idusuario, @RequestBody UsuarioDto usuarioDto){
+        if(!usuarioService.existByIdUsr(idusuario))
+            return new ResponseEntity(new Mensaje("No existe el usuario"), HttpStatus.NOT_FOUND);
+        if(usuarioService.existByUsername(usuarioDto.getUsername()))
+            return new ResponseEntity(new Mensaje("EL usuario ya existe"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(usuarioDto.getUsername()))
+            return new ResponseEntity(new Mensaje("El nombre de usuario es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(usuarioDto.getPassword()))
+            return new ResponseEntity(new Mensaje("La contraseña es obligatoria"), HttpStatus.BAD_REQUEST);
+        Usuario usuario = usuarioService.getOneUsr(idusuario).get();
+        usuario.setUsername(usuarioDto.getUsername());
+        usuario.setPassword(usuarioDto.getPassword());
+        usuarioService.save(usuario);
+        return new ResponseEntity(new Mensaje("Usuario actualizado"), HttpStatus.OK);
+    }
+    @DeleteMapping("/deleteuser/{idusuario}")
+    public ResponseEntity<?> deleteUsr(@PathVariable("idusuario")int idusuario){
+        if(!usuarioService.existByIdUsr(idusuario))
+            return new ResponseEntity(new Mensaje("No existe el usuario"), HttpStatus.NOT_FOUND);
+        usuarioService.delete(idusuario);
+        return new ResponseEntity(new Mensaje("Usuario eliminado"), HttpStatus.OK);
+    }
+
 
 
 
