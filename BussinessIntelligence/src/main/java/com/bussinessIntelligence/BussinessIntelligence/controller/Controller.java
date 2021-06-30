@@ -2,10 +2,13 @@ package com.bussinessIntelligence.BussinessIntelligence.controller;
 
 import com.bussinessIntelligence.BussinessIntelligence.dto.ClienteDto;
 import com.bussinessIntelligence.BussinessIntelligence.dto.Mensaje;
+import com.bussinessIntelligence.BussinessIntelligence.dto.ProvDto;
 import com.bussinessIntelligence.BussinessIntelligence.dto.VentaDto;
 import com.bussinessIntelligence.BussinessIntelligence.entity.Cliente;
+import com.bussinessIntelligence.BussinessIntelligence.entity.Prov;
 import com.bussinessIntelligence.BussinessIntelligence.entity.Venta;
 import com.bussinessIntelligence.BussinessIntelligence.service.ClienteService;
+import com.bussinessIntelligence.BussinessIntelligence.service.ProvService;
 import com.bussinessIntelligence.BussinessIntelligence.service.VentaService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,10 @@ public class Controller {
     ClienteService clienteService;
     @Autowired
     VentaService ventaService;
+    @Autowired
+    ProvService provService;
 
+    //clientes
     @GetMapping("/listaclientes")
     public ResponseEntity<List<Cliente>> list(){
         List<Cliente> list = clienteService.list();
@@ -97,6 +103,7 @@ public class Controller {
         clienteService.delete(idcliente);
         return new ResponseEntity(new Mensaje("Cliente eliminado"), HttpStatus.OK);
     }
+    //ventas
 
     @GetMapping("/listaventas")
     public ResponseEntity<List<Venta>> listV(){
@@ -133,6 +140,61 @@ public class Controller {
         Venta venta = new Venta(ventaDto.getIdcliente(), ventaDto.getFecha(), ventaDto.getIdproducto(), ventaDto.getCantidad(), ventaDto.getPrecio(), ventaDto.getTotal());
         ventaService.save(venta);
         return new ResponseEntity(new Mensaje("Venta creada"), HttpStatus.OK);
+    }
+
+    //proveedores
+   @GetMapping("/listaproveedores")
+    public ResponseEntity<List<Prov>> listProv(){
+        List<Prov> listProv = provService.list();
+        return new ResponseEntity(listProv, HttpStatus.OK);
+    }
+    @GetMapping("/detailproveedor/{idproveedor}")
+    public  ResponseEntity<Prov> getByIdProv(@PathVariable("idproveedor") int idproveedor){
+        if(!provService.existByIdProv(idproveedor))
+            return new ResponseEntity(new Mensaje("No existe el proveedor"), HttpStatus.NOT_FOUND);
+        Prov prov = provService.getOneProv(idproveedor).get();
+        return new ResponseEntity(prov, HttpStatus.OK);
+    }
+    @PostMapping("/createproveedor")
+    public ResponseEntity<?> create(@RequestBody ProvDto provDto){
+        if(StringUtils.isBlank(provDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(provDto.getDireccion()))
+            return new ResponseEntity(new Mensaje("La direccion es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(provDto.getTelefono()))
+            return new ResponseEntity(new Mensaje("El telefono es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (provService.existByIdNombreProv(provDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre ya existe"), HttpStatus.BAD_REQUEST);
+        Prov prov = new Prov(provDto.getNombre(), provDto.getDireccion(), provDto.getTelefono());
+        provService.save(prov);
+        return new ResponseEntity(new Mensaje("Proveedor creado"), HttpStatus.OK);
+    }
+    @PutMapping("updateproveedor/{idproveedor}")
+    public ResponseEntity<?> update(@PathVariable("idproveedor")int idproveedor, @RequestBody ProvDto provDto){
+        if(!provService.existByIdProv(idproveedor))
+            return new ResponseEntity(new Mensaje("No existe el proveedor"), HttpStatus.NOT_FOUND);
+        if (provService.existByIdNombreProv(provDto.getNombre()) && provService.getByNombreProv(provDto.getNombre()).get().getIdproveedor() != idproveedor)
+            return new ResponseEntity(new Mensaje("El nombre ya existe"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(provDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(provDto.getDireccion()))
+            return new ResponseEntity(new Mensaje("La direccion es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(provDto.getTelefono()))
+            return new ResponseEntity(new Mensaje("El telefono es obligatorio"), HttpStatus.BAD_REQUEST);
+        Prov prov = provService.getOneProv(idproveedor).get();
+        prov.setNombre(provDto.getNombre());
+        prov.setDireccion(provDto.getDireccion());
+        prov.setTelefono(provDto.getTelefono());
+        provService.save(prov);
+        return new ResponseEntity(new Mensaje("Proveedor actualizado"), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteproveedor/{idproveedor}")
+    public ResponseEntity<?> deleteProv(@PathVariable("idproveedor")int idproveedor){
+        if(!provService.existByIdProv(idproveedor))
+            return new ResponseEntity(new Mensaje("No existe el proveedor"), HttpStatus.NOT_FOUND);
+        provService.delete(idproveedor);
+        return new ResponseEntity(new Mensaje("Proveedor eliminado"), HttpStatus.OK);
     }
 
 

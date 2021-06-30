@@ -33,9 +33,9 @@ public class VentaService {
         ventaRepository.save(venta);
     }
 
-    public void delete(int idventa){
+   /* public void delete(int idventa){
         ventaRepository.deleteById(idventa);
-    }
+    }*/
 
     public boolean existByIdV(int idventa){
         return ventaRepository.existsById(idventa);

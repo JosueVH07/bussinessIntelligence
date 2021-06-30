@@ -1,32 +1,17 @@
-package com.bussinessIntelligence.BussinessIntelligence.entity;
+package com.bussinessIntelligence.BussinessIntelligence.dto;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "proveedor")
-public class Proveedor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idproveedor;
+public class ProvDto {
     private String nombre;
     private String direccion;
     private String telefono;
 
-    public Proveedor() {
+    public ProvDto() {
     }
 
-    public Proveedor(String nombre, String direccion, String telefono) {
+    public ProvDto(String nombre, String direccion, String telefono) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
-    }
-
-    public int getIdproveedor() {
-        return idproveedor;
-    }
-
-    public void setIdproveedor(int idproveedor) {
-        this.idproveedor = idproveedor;
     }
 
     public String getNombre() {
