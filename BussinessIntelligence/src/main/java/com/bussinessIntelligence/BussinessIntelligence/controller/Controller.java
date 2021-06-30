@@ -1,13 +1,12 @@
 package com.bussinessIntelligence.BussinessIntelligence.controller;
 
-import com.bussinessIntelligence.BussinessIntelligence.dto.ClienteDto;
-import com.bussinessIntelligence.BussinessIntelligence.dto.Mensaje;
-import com.bussinessIntelligence.BussinessIntelligence.dto.ProvDto;
-import com.bussinessIntelligence.BussinessIntelligence.dto.VentaDto;
+import com.bussinessIntelligence.BussinessIntelligence.dto.*;
 import com.bussinessIntelligence.BussinessIntelligence.entity.Cliente;
+import com.bussinessIntelligence.BussinessIntelligence.entity.Producto;
 import com.bussinessIntelligence.BussinessIntelligence.entity.Prov;
 import com.bussinessIntelligence.BussinessIntelligence.entity.Venta;
 import com.bussinessIntelligence.BussinessIntelligence.service.ClienteService;
+import com.bussinessIntelligence.BussinessIntelligence.service.ProductoService;
 import com.bussinessIntelligence.BussinessIntelligence.service.ProvService;
 import com.bussinessIntelligence.BussinessIntelligence.service.VentaService;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +27,8 @@ public class Controller {
     VentaService ventaService;
     @Autowired
     ProvService provService;
+    @Autowired
+    ProductoService productoService;
 
     //clientes
     @GetMapping("/listaclientes")
@@ -134,7 +135,7 @@ public class Controller {
         if (ventaDto.getTotal()<=0 || ventaDto.getPrecio() == null)
             return new ResponseEntity(new Mensaje("El total de la venta debe ser mayor a cero"), HttpStatus.BAD_REQUEST);
         if (!clienteService.existById(ventaDto.getIdcliente()))
-            return new ResponseEntity(new Mensaje("El cliente no existe"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("El cliente no existe"), HttpStatus.NOT_FOUND);
         /*if (!clienteService.existById(ventaDto.getIdproducto()))
             return new ResponseEntity(new Mensaje("El producto no existe"), HttpStatus.BAD_REQUEST);*/ //meter validacion de producto
         Venta venta = new Venta(ventaDto.getIdcliente(), ventaDto.getFecha(), ventaDto.getIdproducto(), ventaDto.getCantidad(), ventaDto.getPrecio(), ventaDto.getTotal());
@@ -196,6 +197,77 @@ public class Controller {
         provService.delete(idproveedor);
         return new ResponseEntity(new Mensaje("Proveedor eliminado"), HttpStatus.OK);
     }
+
+    //productos
+    @GetMapping("/listapproductos")
+    public ResponseEntity<List<Producto>> listProd(){
+        List<Producto> listProd = productoService.list();
+        return new ResponseEntity(listProd, HttpStatus.OK);
+    }
+    @GetMapping("/detailproducto/{idproducto}")
+    public  ResponseEntity<Producto> getByIdProd(@PathVariable("idproducto") int idproducto){
+        if(!productoService.existByIdProd(idproducto))
+            return new ResponseEntity(new Mensaje("No existe el producto"), HttpStatus.NOT_FOUND);
+        Producto producto = productoService.getOneProd(idproducto).get();
+        return new ResponseEntity(producto, HttpStatus.OK);
+    }
+    @GetMapping("/detailnombreproducto/{nombre}")
+    public  ResponseEntity<Producto> getByNombreProd(@PathVariable("nombre") String nombre){
+        if(!productoService.existByNombreProd(nombre))
+            return new ResponseEntity(new Mensaje("No existe el nombre del producto"), HttpStatus.NOT_FOUND);
+        Producto producto = productoService.getByNombreProd(nombre).get();
+        return new ResponseEntity(producto, HttpStatus.OK);
+    }
+    @PostMapping("/createproducto")
+    public ResponseEntity<?> create(@RequestBody ProductoDto productoDto){
+        if (!provService.existByIdProv(productoDto.getIdproveedor()))
+            return new ResponseEntity(new Mensaje("El proveedor no existe"), HttpStatus.NOT_FOUND);
+        if(StringUtils.isBlank(productoDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (productoDto.getPrecio()<=0 || productoDto.getPrecio() == null)
+            return new ResponseEntity(new Mensaje("El precio es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(productoDto.getDescripcion()))
+            return new ResponseEntity(new Mensaje("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (productoDto.getStock()<0)
+            return new ResponseEntity(new Mensaje("El stock debe ser mayor o igual a 0"), HttpStatus.BAD_REQUEST);
+        Producto producto = new Producto(productoDto.getIdproveedor(),productoDto.getNombre(), productoDto.getPrecio(), productoDto.getDescripcion(), productoDto.getStock());
+        productoService.save(producto);
+        return new ResponseEntity(new Mensaje("Producto creado"), HttpStatus.OK);
+    }
+    @PutMapping("updateproducto/{idproducto}")
+    public ResponseEntity<?> update(@PathVariable("idproducto")int idproducto, @RequestBody ProductoDto productoDto){
+        if(!productoService.existByIdProd(idproducto))
+            return new ResponseEntity(new Mensaje("No existe el producto"), HttpStatus.NOT_FOUND);
+        if(!provService.existByIdProv(productoDto.getIdproveedor()))
+            return new ResponseEntity(new Mensaje("No existe el proveedor"), HttpStatus.NOT_FOUND);
+        if (productoDto.getIdproveedor()<=0)
+            return new ResponseEntity(new Mensaje("El proveedor es obligatorio"), HttpStatus.BAD_REQUEST);
+        if(StringUtils.isBlank(productoDto.getNombre()))
+            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (productoDto.getPrecio()<=0 || productoDto.getPrecio() == null)
+            return new ResponseEntity(new Mensaje("El precio es obligatorio"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(productoDto.getDescripcion()))
+            return new ResponseEntity(new Mensaje("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (productoDto.getStock()<0)
+            return new ResponseEntity(new Mensaje("El stock debe ser mayor o igual a 0"), HttpStatus.BAD_REQUEST);
+        Producto producto = productoService.getOneProd(idproducto).get();
+        producto.setIdproveedor(productoDto.getIdproveedor());
+        producto.setNombre(producto.getNombre());
+        producto.setPrecio(productoDto.getPrecio());
+        producto.setDescripcion(productoDto.getDescripcion());
+        producto.setStock(productoDto.getStock());
+        productoService.save(producto);
+        return new ResponseEntity(new Mensaje("Producto actualizado"), HttpStatus.OK);
+    }
+    @DeleteMapping("/deleteproducto/{idproducto}")
+    public ResponseEntity<?> deleteProd(@PathVariable("idproducto")int idproducto){
+        if(!productoService.existByIdProd(idproducto))
+            return new ResponseEntity(new Mensaje("No existe el producto"), HttpStatus.NOT_FOUND);
+        productoService.delete(idproducto);
+        return new ResponseEntity(new Mensaje("Producto eliminado"), HttpStatus.OK);
+    }
+
+
 
 
 }
