@@ -1,0 +1,33 @@
+<app-navbar-empleado></app-navbar-empleado>
+
+<nav class="navbar navbar-light bg-light ">
+
+    <ul class="navbar-nav">
+        <form class="container-fluid justify-content-start ml-auto">
+            <button class="btn btn-outline-success me-2" type="button" routerLink="/nuevo-puesto"><i
+                    class="far fa-plus-square"></i> Nuevo</button>
+        </form>
+    </ul>
+</nav>
+
+<div class="container mt-4">
+    <table class="table">
+        <thead>
+            <tr class="content">
+                <th scope="col">Id Puesto</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let puesto of puesto">
+                <td>{{puesto.idpuesto}}</td>
+                <td>{{puesto.rolempleado}}</td>
+                <td>{{puesto.descripcion}}</td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>

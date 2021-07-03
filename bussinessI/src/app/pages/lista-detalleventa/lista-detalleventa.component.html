@@ -1,0 +1,27 @@
+<app-navbar-producto></app-navbar-producto>
+
+<div class="container mt-4">
+    <table class="table">
+        <thead>
+            <tr class="content">
+                <th scope="col">Id Detalle Venta</th>
+                <th scope="col">Id Venta</th>
+                <th scope="col">Id Producto</th>
+                <th scope="col">Detalle</th>
+                <th scope="col">Id Empleado</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let detalleventa of detalleventas">
+                <td>{{detalleventa.iddetalleventa}}</td>
+                <td>{{detalleventa.idventa}}</td>
+                <td>{{detalleventa.idproducto}}</td>
+                <td>{{detalleventa.detalle}}</td>
+                <td>{{detalleventa.idempleado}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
