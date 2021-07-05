@@ -1,11 +1,12 @@
 export class Detalleventa {
-    iddetalleventa?: number;
+    iddetalleventa: number;
     idventa: number;
     idproducto: number;
     detalle: string;
     idempleado: number;
 
-    constructor(idventa:number,idproducto:number, detalle:string, idempleado:number){
+    constructor(iddetalleventa:number, idventa:number,idproducto:number, detalle:string, idempleado:number){
+        this.iddetalleventa=iddetalleventa;
         this.idventa=idventa;
         this.idproducto=idproducto;
         this.detalle=detalle;

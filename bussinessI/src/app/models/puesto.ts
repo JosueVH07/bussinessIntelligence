@@ -1,9 +1,10 @@
 export class Puesto {
-    idpuesto?: number;
+    idpuesto: number;
     rolempleado: string;
     descripcion: string;
 
-    constructor(rolempleado: string, descripcion: string){
+    constructor(idpuesto:number ,rolempleado: string, descripcion: string){
+        this.idpuesto=idpuesto;
         this.rolempleado=rolempleado;
         this.descripcion=descripcion;
     }

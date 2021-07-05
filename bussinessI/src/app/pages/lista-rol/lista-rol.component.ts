@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Rol } from 'src/app/models/rol';
 import { ProductoService } from 'src/app/service/producto.service';
 
@@ -9,7 +10,7 @@ import { ProductoService } from 'src/app/service/producto.service';
 })
 export class ListaRolComponent implements OnInit {
   rol: Rol[]=[];
-  constructor(private productoService: ProductoService) { }
+  constructor(private productoService: ProductoService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.cargarRol();
@@ -21,6 +22,22 @@ export class ListaRolComponent implements OnInit {
       },
       err =>{
         console.log(err);
+      }
+    );
+  }
+  borrarP(idrol: number) {
+    this.productoService.deleterol(idrol).subscribe(
+      data => {
+        this.toastr.success('Rol Eliminado', 'OK', {
+          timeOut: 3000
+        });
+        this.cargarRol();
+      },
+      err => {
+        this.toastr.error(err.error.mensaje, 'FAIL', {
+          timeOut: 3000,
+          positionClass: 'toast-top-right'
+        });
       }
     );
   }

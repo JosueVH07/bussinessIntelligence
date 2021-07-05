@@ -1,2 +1,39 @@
 <app-navbar-clientes></app-navbar-clientes>
-<p>nuevo-cliente works!</p>
+
+<div class="container ">
+    <div class="row mt-4">
+        <div class="col-md-4 mx-auto">
+            <form (ngSubmit)="onCreate()" novalidate #f="ngForm">
+                <div class="form-group">
+                    <label for="idcliente">Id Cliente</label>
+                    <input type="number" class="form-control" id="idcliente" 
+                    name="idcliente" [(ngModel)]="idcliente" required>
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" 
+                    name="nombre" [(ngModel)]="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Telefono</label>
+                    <input type="tel" class="form-control" id="telefono" 
+                    name="telefono" [(ngModel)]="telefono" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo</label>
+                    <input type="email" class="form-control" id="correo" 
+                    name="correo" [(ngModel)]="correo" required>
+                </div>
+                <div class="form-group">
+                    <label for="direccion">Direccion</label>
+                    <input type="text" class="form-control" id="direccion" 
+                    name="direccion" [(ngModel)]="direccion" required>
+                </div>
+                <div class="d-grid gap-2 mt-2">
+                <button class="btn btn-outline-success btn-block" [disabled]="!f.valid">Crear</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+

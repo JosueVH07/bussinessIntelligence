@@ -34,35 +34,47 @@ import { NuevoVentaComponent } from './pages/lista-venta/nuevo-venta.component';
 
 const routes: Routes = [
   {path: '', component: DashboardComponent},
-  {path: 'detalle-cliente/:idcliente', component: DetalleClienteComponent},//cliente
+  {path: 'detalle-cliente/:nombre', component: DetalleClienteComponent},//cliente
+  {path: 'detalle-cliente/:idcliente', component: DetalleClienteComponent},
   {path: 'nuevo-cliente', component: NuevoClienteComponent},
   {path: 'editar-cliente/:idcliente', component: EditarClienteComponent},
   {path: 'lista-cliente', component: ListaClienteComponent},
+
   {path: 'lista-empleado', component: ListaEmpleadoComponent},//empleado
-  {path: 'detalle-empleado', component: DetalleEmpleadoComponent},
-  {path: 'editar-empleado', component: EditarEmpleadoComponent},
+  {path: 'detalle-empleado/idempleado:', component: DetalleEmpleadoComponent},
+  {path: 'editar-empleado/:idempleado', component: EditarEmpleadoComponent},
   {path: 'nuevo-empleado', component: NuevoEmpleadoComponent},
+
   {path: 'lista-producto', component: ListaProductoComponent},//producto
   {path: 'nuevo-producto', component: NuevoProductoComponent},
-  {path: 'editar-producto', component: EditarProductoComponent},
-  {path: 'detalle-producto', component: DetalleProductoComponent},
+  {path: 'editarproducto/:idproducto', component: EditarProductoComponent},
+  {path: 'detail-producto/:idproducto', component: DetalleProductoComponent},
+  {path: 'detail-producto/:nombre', component: DetalleProductoComponent},
+
   {path: 'lista-prov', component: ListaProvComponent},//proveedor
-  {path: 'detalle-prov', component: DetalleProvComponent},
-  {path: 'editar-prov', component: EditarProvComponent},
+  {path: 'detalle-prov/:idproveedor', component: DetalleProvComponent},
+  {path: 'editar-prov/:idproveedor', component: EditarProvComponent},
   {path: 'nuevo-prov', component: NuevoProvComponent},
-  {path: 'editar-puesto', component: EditarPuestoComponent},//puesto
+
+
+  {path: 'editar-puesto/:idpuesto', component: EditarPuestoComponent},//puesto
   {path: 'lista-puesto', component: ListaPuestoComponent},
   {path: 'nuevo-puesto', component: NuevoPuestoComponent},
+
+
   {path: 'lista-rol', component: ListaRolComponent},//rol
-  {path: 'editar-rol', component: EditarRolComponent},
+  {path: 'editar-rol/:idrol', component: EditarRolComponent},
   {path: 'nuevo-rol', component: NuevoRolComponent},
+
   {path: 'lista-usuario', component: ListaUsuarioComponent},//usuario
-  {path: 'detalle-usuario', component: DetalleUsuarioComponent},
-  {path: 'editar-usuario', component: EditarUsuarioComponent},
+  {path: 'detalle-usuario/:idusuario', component: DetalleUsuarioComponent},
+  {path: 'editar-usuario/:idusuario', component: EditarUsuarioComponent},
   {path: 'nuevo-usuario', component: NuevoUsuarioComponent},
+
   {path: 'lista-venta', component: ListaVentaComponent},//venta
   {path: 'nuevo-venta', component: NuevoVentaComponent},
   {path: 'detalle-venta', component: DetalleVentaComponent},  
+
   {path: 'lista-detalleventa', component: ListaDetalleventaComponent},//detalleventa
   {path: '**', redirectTo: '', pathMatch: 'full'},
   

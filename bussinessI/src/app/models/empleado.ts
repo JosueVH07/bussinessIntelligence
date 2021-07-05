@@ -1,5 +1,5 @@
 export class Empleado {
-    idempleado?: number;
+    idempleado: number;
     idpuesto:number;
     idusuario: number;
     idrol: number;
@@ -8,7 +8,8 @@ export class Empleado {
     direccion: string;
     correo: string;
 
-    constructor(idpuesto:number, idusuario: number,  idrol: number, nombre: string, telefono: string, direccion: string, correo: string){
+    constructor(idempleado:number, idpuesto:number, idusuario: number,  idrol: number, nombre: string, telefono: string, direccion: string, correo: string){
+        this.idempleado=idempleado;
         this.idpuesto=idpuesto;
         this.idusuario=idusuario;
         this.idrol=idrol;

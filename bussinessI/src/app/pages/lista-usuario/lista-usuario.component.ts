@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/usuario';
 import { ProductoService } from 'src/app/service/producto.service';
 
@@ -9,7 +10,7 @@ import { ProductoService } from 'src/app/service/producto.service';
 })
 export class ListaUsuarioComponent implements OnInit {
   usuario: Usuario[]=[];
-  constructor(private productoService: ProductoService) { }
+  constructor(private productoService: ProductoService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.cargarUsr();
@@ -22,6 +23,22 @@ export class ListaUsuarioComponent implements OnInit {
       },
       err =>{
         console.log(err);
+      }
+    );
+  }
+  borrarP(idusuario: number) {
+    this.productoService.deleteuser(idusuario).subscribe(
+      data => {
+        this.toastr.success('Usuario Eliminado', 'OK', {
+          timeOut: 3000
+        });
+        this.cargarUsr();
+      },
+      err => {
+        this.toastr.error(err.error.mensaje, 'FAIL', {
+          timeOut: 3000,
+          positionClass: 'toast-top-right'
+        });
       }
     );
   }

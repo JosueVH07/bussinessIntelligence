@@ -26,7 +26,8 @@
                 <td>{{puesto.idpuesto}}</td>
                 <td>{{puesto.rolempleado}}</td>
                 <td>{{puesto.descripcion}}</td>
-
+                <td><button class="btn btn-outline-warning" routerLink="/editar-puesto/{{puesto.idpuesto}}"><i class="far fa-edit"></i></button></td>
+        <td><button class="btn btn-outline-danger" (click)="borrarP(puesto.idpuesto)"><i class="far fa-trash-alt"></i></button></td>
             </tr>
         </tbody>
     </table>

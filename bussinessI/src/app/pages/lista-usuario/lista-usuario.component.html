@@ -27,7 +27,8 @@
                 <td>{{usuario.idusuario}}</td>
                 <td>{{usuario.username}}</td>
                 <td>{{usuario.password}}</td>
-
+                <td><button class="btn btn-outline-warning" routerLink="/editar-usuario/{{usuario.idusuario}}"><i class="far fa-edit"></i></button></td>
+                <td><button class="btn btn-outline-danger" (click)="borrarP(usuario.idusuario)"><i class="far fa-trash-alt"></i></button></td>
             </tr>
         </tbody>
     </table>

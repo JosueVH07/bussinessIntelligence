@@ -25,7 +25,8 @@
                 <td>{{rol.idrol}}</td>
                 <td>{{rol.nombre}}</td>
                 <td>{{rol.idusuario}}</td>
-
+                <td><button class="btn btn-outline-warning" routerLink="/editar-rol/{{rol.idrol}}"><i class="far fa-edit"></i></button></td>
+        <td><button class="btn btn-outline-danger" (click)="borrarP(rol.idrol)"><i class="far fa-trash-alt"></i></button></td>
             </tr>
         </tbody>
     </table>

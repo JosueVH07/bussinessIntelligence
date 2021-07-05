@@ -1,2 +1,50 @@
 <app-navbar-producto></app-navbar-producto>
-<p>nuevo-venta works!</p>
+
+<div class="container ">
+    <div class="row mt-4">
+        <div class="col-md-4 mx-auto">
+            <form (ngSubmit)="onCreate()" novalidate #f="ngForm">
+
+                <div class="form-group">
+                    <label for="idventa">Id Venta</label>
+                    <input type="number" class="form-control" id="idventa" 
+                    name="idventa" [(ngModel)]="idventa" required>
+                </div>
+                <div class="form-group">
+                    <label for="idcliente">Id Cliente</label>
+                    <input type="number" class="form-control" id="idcliente" 
+                    name="idcliente" [(ngModel)]="idcliente" required>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" class="form-control" id="fecha" 
+                    name="fecha" [(ngModel)]="fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="idproducto">Id Producto</label>
+                    <input type="number" class="form-control" id="idproducto" 
+                    name="idproducto" [(ngModel)]="idproducto" required>
+                </div>
+                <div class="form-group">
+                    <label for="cantidad">Cantidad</label>
+                    <input type="number" class="form-control" id="cantidad" 
+                    name="cantidad" [(ngModel)]="cantidad" required>
+                </div>
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" class="form-control" id="precio" 
+                    name="precio" [(ngModel)]="precio" required>
+                </div>
+                <div class="form-group">
+                    <label for="total">Total</label>
+                    <input type="number" class="form-control" id="total" 
+                    name="total" [(ngModel)]="total" required>
+                </div>
+                <div class="d-grid gap-2 mt-2">
+                <button class="btn btn-outline-success btn-block" [disabled]="!f.valid">Crear</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -73,6 +73,9 @@ public deleteproveedor(idproveedor: number):Observable<any>{
 public listapproductos(): Observable<Producto[]>{
   return this.httpClient.get<Producto[]>(this.productoURl + 'listapproductos');
 }
+public detailproducto(idproducto: number): Observable<Producto>{
+  return this.httpClient.get<Producto>(this.productoURl + `detailproducto/${idproducto}`);
+}
 public detailnombreproducto(nombre: string): Observable<Producto>{
   return this.httpClient.get<Producto>(this.productoURl + `detailnombreproducto/${nombre}`);
 }

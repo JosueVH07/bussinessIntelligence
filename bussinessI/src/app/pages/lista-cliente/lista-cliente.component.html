@@ -31,6 +31,8 @@
                 <td><i class="fas fa-phone-alt"></i> {{cliente.telefono}}</td>
                 <td>{{cliente.correo}}</td>
                 <td>{{cliente.direccion}}</td>
+                <td><button class="btn btn-outline-warning" routerLink="/editar-cliente/{{cliente.idcliente}}"><i class="far fa-edit"></i></button></td>
+                <td><button class="btn btn-outline-danger" (click)="borrarP(cliente.idcliente)"><i class="far fa-trash-alt"></i></button></td>
             </tr>
         </tbody>
     </table>
